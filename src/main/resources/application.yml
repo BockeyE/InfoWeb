@@ -1,0 +1,59 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/btdc?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: btdc
+  #      username:
+  #      password:
+#  freemarker:
+#      template-loader-path: classpath:templates/
+#      cache: false
+#      charset: utf-8
+#      check-template-location: true
+#      content-type: text/html
+#      expose-request-attributes: true
+#      expose-session-attributes: true
+#      request-context-attribute: request
+#      suffix: .ftl
+
+
+  # 邮件配置
+  mail:
+    host: smtp.qq.com
+    username: 2368311551@qq.com
+    #上面获取设置的授权码(POP3/SMTP)  换用你自己在 QQ 邮箱中设置的授权码
+    password: negwxcbdstnmeaib
+    default-encoding: UTF-8
+    protocol: smtp
+
+
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+    check-template-location: true
+    check-template: true
+
+server:
+  tomcat:
+    uri-encoding: utf-8
+  port: 8080
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        boot:
+#          autoconfigure: debug
+
+
