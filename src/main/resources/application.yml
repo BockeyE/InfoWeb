@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/btdc?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/InfoWeb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
@@ -14,7 +14,7 @@ spring:
     mongodb:
       host: 127.0.0.1
       port: 27017
-      database: btdc
+      database: InfoWeb
   #      username:
   #      password:
 #  freemarker:
@@ -30,13 +30,13 @@ spring:
 
 
   # 邮件配置
-  mail:
-    host: smtp.qq.com
-    username: 2368311551@qq.com
-    #上面获取设置的授权码(POP3/SMTP)  换用你自己在 QQ 邮箱中设置的授权码
-    password: negwxcbdstnmeaib
-    default-encoding: UTF-8
-    protocol: smtp
+#  mail:
+#    host: smtp.qq.com
+#    username: 2368311551@qq.com
+#    #上面获取设置的授权码(POP3/SMTP)  换用你自己在 QQ 邮箱中设置的授权码
+#    password: negwxcbdstnmeaib
+#    default-encoding: UTF-8
+#    protocol: smtp
 
 
   thymeleaf:
