@@ -11,15 +11,21 @@ import com.InfoWeb.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,7 +92,8 @@ public class HomeController {
 
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model,
-                        @RequestParam(value = "pop", defaultValue = "0") int pop) {
+                        @RequestParam(value = "pop", defaultValue = "0") int pop,
+                        HttpServletRequest request) throws Exception {
         List<ViewResult> vos = getNewsDto(1, 0, 30);
         if (vos != null && vos.size() > 0) {
             model.addAttribute("vos", vos);
@@ -97,7 +104,7 @@ public class HomeController {
             pop = 0;
         }
         model.addAttribute("pop", pop);
-        System.out.println(getNewsDto(1, 0, 30) + "、、、");
+        System.out.println(getNewsDto(1, 0, 30) + "/ controller ,gete news");
         return "home";
     }
 

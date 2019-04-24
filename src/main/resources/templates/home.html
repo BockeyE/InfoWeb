@@ -4,7 +4,7 @@
       layout:decorator="fragments/layout">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>头条资讯-牛客网</title>
+    <title>Informations</title>
 </head>
 <body>
 <header th:replace="fragments/header :: header"></header>
@@ -15,7 +15,7 @@
                     <div class="daily" th:each="vo :${vos}">
                         <h3 class="date">
                             <i class="fa icon-calendar"></i>
-                            头条资讯&nbsp;
+                            HeadLines Worldwide&nbsp;
                             <span th:text="${#calendars.format(vo.news.createDate,'yyyy/MM/dd HH:mm:ss')}">头条资讯&nbsp;
                             </span>
                         </h3>

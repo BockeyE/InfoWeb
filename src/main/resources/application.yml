@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/InfoWeb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/infoweb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
@@ -14,19 +14,19 @@ spring:
     mongodb:
       host: 127.0.0.1
       port: 27017
-      database: InfoWeb
+      database: infoweb
   #      username:
   #      password:
-#  freemarker:
-#      template-loader-path: classpath:templates/
-#      cache: false
-#      charset: utf-8
-#      check-template-location: true
-#      content-type: text/html
-#      expose-request-attributes: true
-#      expose-session-attributes: true
-#      request-context-attribute: request
-#      suffix: .ftl
+  #  freemarker:
+  #      template-loader-path: classpath:templates/
+  #      cache: false
+  #      charset: utf-8
+  #      check-template-location: true
+  #      content-type: text/html
+  #      expose-request-attributes: true
+  #      expose-session-attributes: true
+  #      request-context-attribute: request
+  #      suffix: .ftl
 
 
   # 邮件配置
@@ -49,6 +49,8 @@ server:
   tomcat:
     uri-encoding: utf-8
   port: 8080
+
+localURL: http://localhost:8080
 #logging:
 #  level:
 #    org:

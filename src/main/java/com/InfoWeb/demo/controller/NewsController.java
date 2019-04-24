@@ -8,21 +8,14 @@ import com.InfoWeb.demo.model.EntityType;
 import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.model.News;
 import com.InfoWeb.demo.service.*;
-import com.InfoWeb.demo.service.*;
-import com.InfoWeb.demo.service.*;
 import com.InfoWeb.demo.util.ToutiaoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,42 +44,7 @@ public class NewsController {
     @Autowired
     private LikeService likeService;
 
-    @RequestMapping(value = "/image",method = {RequestMethod.GET})
-    @ResponseBody
-    public void getImage(@RequestParam("name") String imageName,
-                         HttpServletResponse response){
-        try {
-            response.setContentType("image/jpeg");
-            StreamUtils.copy(new FileInputStream(new
-                    File(ToutiaoUtil.IMAGE_DIR + imageName)),response.getOutputStream());
 
-        }catch (Exception e){
-            logger.error("读取图片错误" + imageName + e.getMessage());
-        }
-    }
-
-    @RequestMapping(value = "/uploadImage/",method = {RequestMethod.GET})
-    public String uploadImage(){
-        return "upload";
-    }
-
-
-    @RequestMapping(value = "/uploadImage/",method = {RequestMethod.POST})
-    @ResponseBody
-    public String uploadImage(@RequestParam("file")MultipartFile file){
-        try{
-            //String fileUrl = newsService.saveImage(file);
-            String mongoid = gridService.saveImage(file);
-            if(mongoid == null){
-                return ToutiaoUtil.getJSONString(1,"上传图片失败");
-            }
-            return ToutiaoUtil.getJSONString(0,mongoid);
-        }catch (Exception e){
-            logger.error("上传图片失败" + e.getMessage());
-            return  ToutiaoUtil.getJSONString(1,"上传图片失败");
-        }
-
-    }
 
     @RequestMapping(value = "/user/addNews",method = {RequestMethod.GET})
     public String addNews(){
