@@ -58,9 +58,8 @@ public class EventDispatcher implements InitializingBean, ApplicationContextAwar
                 //从队列一直消费
                 while (true) {
                     String key = QueueKeyUtil.getEventQueueKey();
-                    List<String> messages = localQueue.brpop(10, key);
+                    List<String> messages = localQueue.brpop(60, key);
                     System.out.println("消费队列: messages size " + messages.size());
-//                    System.out.println("消费队列: messages size ");
                     //第一个元素是队列名字
                     if (messages.size() > 0) {
                         for (String message : messages) {

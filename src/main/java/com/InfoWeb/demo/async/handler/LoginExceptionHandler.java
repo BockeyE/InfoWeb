@@ -39,8 +39,8 @@ public class LoginExceptionHandler implements EventHandler {
         Map<String ,Object> map = new HashMap<>();
         map.put("username","qq1");
         map.put("text","你上次的登录IP异常");
-        emailService.sendTemplateMail("534634799@qq.com","头条资讯",
-                "email/email",map);
+//        emailService.sendTemplateMail("534634799@qq.com","头条资讯",
+//                "email/email",map);
     }
 
     @Override

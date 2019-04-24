@@ -70,8 +70,13 @@ public class HomeController {
     }
 
     private List<ViewResult> getNewsDto(int userId, int offset, int limit) {
-        List<News> newsList = newsService.getLatestNews(userId, offset, limit);
-//        List<News> newsList = newsService.getLatestNews(offset,limit);
+        List<News> newsList = null;
+        if (userId == 0) {
+            newsList = newsService.getLatestNews(offset, limit);
+        } else {
+            newsList = newsService.getLatestNews(userId, offset, limit);
+        }
+
         int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
         List<ViewResult> vos = new ArrayList<>();
         for (News news : newsList) {
@@ -92,9 +97,8 @@ public class HomeController {
 
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model,
-                        @RequestParam(value = "pop", defaultValue = "0") int pop,
-                        HttpServletRequest request) throws Exception {
-        List<ViewResult> vos = getNewsDto(1, 0, 30);
+                        @RequestParam(value = "pop", defaultValue = "0") int pop) throws Exception {
+        List<ViewResult> vos = getNewsDto(0, 0, 30);
         if (vos != null && vos.size() > 0) {
             model.addAttribute("vos", vos);
         }
@@ -104,7 +108,7 @@ public class HomeController {
             pop = 0;
         }
         model.addAttribute("pop", pop);
-        System.out.println(getNewsDto(1, 0, 30) + "/ controller ,gete news");
+        System.out.println(getNewsDto(3, 0, 30) + "/ controller ,gete news");
         return "home";
     }
 

@@ -43,7 +43,7 @@ public class CommentController {
             comment.setStatus(0);
             commentService.addComment(comment);
 
-            //更新评论数量，以后用哦异步实现
+            //更新评论数量，以后用异步实现
             int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             newsService.updateCommentCount(comment.getEntityId(),count);
 

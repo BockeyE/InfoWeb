@@ -7,6 +7,7 @@ import com.InfoWeb.demo.async.EventType;
 import com.InfoWeb.demo.model.EntityType;
 import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.model.News;
+import com.InfoWeb.demo.model.User;
 import com.InfoWeb.demo.service.LikeService;
 import com.InfoWeb.demo.service.NewsService;
 //import org.apache.ibatis.annotations.Param;
@@ -33,31 +34,35 @@ public class LikeController {
     @Autowired
     private EventProducer eventProducer;
 
-    @RequestMapping(value = {"/like"},method = {RequestMethod.GET, RequestMethod.POST})
-    //@ResponseBody
-    public String like(@RequestParam ("newsId") int newsId){
-        long likeCount = likeService.like(hostHolder.getUser().getId(),
-                 EntityType.ENTITY_NEWS,newsId);
+    @RequestMapping(value = {"/like"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String like(@RequestParam("newsId") int newsId) {
+        User user = hostHolder.getUser();
+        if (user == null) {
+            return ToutiaoUtil.getJSONString(1, "请登录后点赞！");
+        }
+        long likeCount = likeService.like(user.getId(), EntityType.ENTITY_NEWS, newsId);
         System.out.println("like likecount " + likeCount);
         //更新喜欢数
         News news = newsService.getById(newsId);
-        newsService.updateLikeCount(newsId,(int)likeCount);
+        newsService.updateLikeCount(newsId, (int) likeCount);
         eventProducer.startEvent(new EventModel(EventType.LIKE)
                 .setEntityOwnerId(news.getUserId())
                 .setActorId(hostHolder.getUser().getId())
                 .setEntityId(newsId));
-        return ToutiaoUtil.getJSONString(0,String.valueOf(likeCount));
-//        return  "redirect:/";
+        return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
     }
 
-    @RequestMapping(value = {"/dislike"},method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = {"/dislike"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String dislike(@RequestParam("newsId") int newsId){
-        long likeCount = likeService.disLike(hostHolder.getUser().getId(), EntityType.ENTITY_NEWS,newsId);
+    public String dislike(@RequestParam("newsId") int newsId) {
+        User user = hostHolder.getUser();
+        if (user == null) {
+            return ToutiaoUtil.getJSONString(1, "请登录后点赞！");
+        }
+        long likeCount = likeService.disLike(user.getId(), EntityType.ENTITY_NEWS, newsId);
         //更新喜欢数
-        newsService.updateLikeCount(newsId,(int)likeCount);
-
-        return ToutiaoUtil.getJSONString(0,String.valueOf(likeCount));
-//        return  "redirect:/";
+        newsService.updateLikeCount(newsId, (int) likeCount);
+        return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
     }
 }

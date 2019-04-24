@@ -48,24 +48,21 @@ public class NewsController {
 
     @RequestMapping(value = "/user/addNews",method = {RequestMethod.GET})
     public String addNews(){
+        System.out.println("get new add");
         return "addNews";
     }
 
     @RequestMapping(value = "/user/addNews/",method = {RequestMethod.POST})
-    // @ResponseBody
-    public String addNewsPost(@RequestParam("image")MultipartFile image,
+     @ResponseBody
+    public String addNewsPost(@RequestParam("image")String image,
                               @RequestParam("title") String title,
                               @RequestParam("link") String link){
+        System.out.println("post new agg");
         try{
-            String fileUrl = gridService.saveImage(image);
-            if(fileUrl == null){
-                return ToutiaoUtil.getJSONString(1,"上传图片失败");
-            }
-
             News news = new News();
             news.setCreateDate(new Date());
             news.setTitle(title);
-            news.setImage(fileUrl);
+            news.setImage(image);
             news.setLink(link);
             if(hostHolder.getUser() != null){
                 news.setUserId(hostHolder.getUser().getId());
@@ -74,9 +71,8 @@ public class NewsController {
                 news.setUserId(3);
             }
             newsService.addNews(news);
-
-            // return ToutiaoUtil.getJSONString(0,fileUrl);
-            return  "redirect:/";
+             return ToutiaoUtil.getJSONString(0,image);
+//            return  "redirect:/";
         }catch (Exception e){
             logger.error("添加资讯失败" + e.getMessage());
             return  ToutiaoUtil.getJSONString(1,"发布资讯失败");

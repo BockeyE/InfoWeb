@@ -62,9 +62,7 @@ public class FileController {
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         try {
-            //String fileUrl = newsService.saveImage(file);
             String mongoid = gridFileService.saveImage(file);
-
             if (mongoid == null) {
                 return ToutiaoUtil.getJSONString(1, "上传图片失败");
             }

@@ -84,10 +84,8 @@ public class LocalQueue {
 
     public List<String> brpop(int timeout, String key) {
         ArrayList<String> arr = new ArrayList<>();
-//        arr.add(key);
         BlockingDeque<String> q = que.get(key);
         System.out.println(que);
-        System.out.println(key);
         if (q != null) {
             String s = null;
             try {
