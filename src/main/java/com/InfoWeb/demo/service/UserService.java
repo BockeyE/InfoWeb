@@ -16,6 +16,8 @@ public interface UserService {
 
     User getUser(Integer id);
 
+    User getUser(String name);
+
     void logout(String ticket);
 
 

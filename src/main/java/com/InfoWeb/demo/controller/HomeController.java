@@ -11,11 +11,9 @@ import com.InfoWeb.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileNotFoundException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,18 +93,21 @@ public class HomeController {
 
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model,
-                        @RequestParam(value = "pop", defaultValue = "0") int pop) throws Exception {
+                        @RequestParam(value = "pop", defaultValue = "0") int pop, HttpServletRequest request) throws Exception {
         List<ViewResult> vos = getNewsDto(0, 0, 30);
         if (vos != null && vos.size() > 0) {
             model.addAttribute("vos", vos);
         }
-        User u = hostHolder.getUser();
-        model.addAttribute("user", u);
-        if (u != null) {
-            pop = 0;
+//        User u = hostHolder.getUser();// boot 里使用的nio线程并不是固定的--已经设置的connect 是keep alive的情况
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Object user = session.getAttribute("user");
+            if (user != null) {
+                model.addAttribute("user", user);
+                pop = 0;
+            }
         }
         model.addAttribute("pop", pop);
-        System.out.println(getNewsDto(3, 0, 30) + "/ controller ,gete news");
         return "home";
     }
 
