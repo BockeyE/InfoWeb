@@ -44,6 +44,7 @@ spring:
     cache: false
     check-template-location: true
     check-template: true
+    mode: LEGACYHTML5
 
 server:
   tomcat:

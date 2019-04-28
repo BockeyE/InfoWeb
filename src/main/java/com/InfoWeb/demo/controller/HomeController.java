@@ -98,6 +98,10 @@ public class HomeController {
         if (vos != null && vos.size() > 0) {
             model.addAttribute("vos", vos);
         }
+        for (ViewResult vo : vos) {
+            System.out.println(vo);
+        }
+
 //        User u = hostHolder.getUser();// boot 里使用的nio线程并不是固定的--已经设置的connect 是keep alive的情况
         HttpSession session = request.getSession(false);
         if (session != null) {
