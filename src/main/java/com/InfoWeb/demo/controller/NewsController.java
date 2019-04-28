@@ -81,7 +81,6 @@ public class NewsController {
     public String newsDetail(@PathVariable("newsId") int newsId, Model model) {
         try {
             News news = newsService.getById(newsId);
-
             if (news != null) {
                 int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
                 if (localUserId != 0) {
@@ -100,10 +99,15 @@ public class NewsController {
                 }
                 model.addAttribute("comments", commentVOs);
             }
-
             model.addAttribute("news", news);
-            model.addAttribute("owner", userService.getUser(news.getUserId()));
+            Integer userId = news.getUserId();
+            if (userId != null) {
+                model.addAttribute("owner", userService.getUser(userId));
+            } else {
+                model.addAttribute("owner", userService.getUser(1));
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("获取资讯明细错误" + e.getMessage());
         }
 
