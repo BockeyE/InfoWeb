@@ -23,7 +23,6 @@ public class News {
     private Integer commentCount;
 
     public String getCreateDate() {
-        System.out.println(createDate);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(createDate);
     }
