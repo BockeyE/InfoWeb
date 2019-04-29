@@ -33,7 +33,7 @@ public class LoginController {
 
     @RequestMapping(value = {"/reg/"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String reg(Model model, @RequestParam("username") String username,
+    public String reg(@RequestParam("username") String username,
                       @RequestParam("password") String password,
                       HttpServletResponse response) {
         System.out.println("reg");

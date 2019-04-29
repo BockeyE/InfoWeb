@@ -55,7 +55,6 @@ public class NewsController {
     public String addNewsPost(@RequestParam("image") String image,
                               @RequestParam("title") String title,
                               @RequestParam("link") String link) {
-        System.out.println("post new agg");
         try {
             News news = new News();
             news.setCreateDate(new Date());
@@ -110,7 +109,6 @@ public class NewsController {
             e.printStackTrace();
             logger.error("获取资讯明细错误" + e.getMessage());
         }
-
         return "detail";
     }
 }
