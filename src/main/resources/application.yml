@@ -15,6 +15,9 @@ spring:
       host: 127.0.0.1
       port: 27017
       database: infoweb
+
+  main:
+    allow-bean-definition-overriding: true
   #      username:
   #      password:
   #  freemarker:
