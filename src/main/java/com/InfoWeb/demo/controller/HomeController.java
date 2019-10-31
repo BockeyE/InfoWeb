@@ -118,7 +118,7 @@ public class HomeController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView home(ModelMap modelMap) {
 
-        logger.info("url=\"home ...回到首页...");
+        logger.info("localURL=\"home ...回到首页...");
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         modelMap.addAttribute("name", "CycloneBoy");

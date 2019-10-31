@@ -10,11 +10,11 @@ spring:
       ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-  data:
-    mongodb:
-      host: 127.0.0.1
-      port: 27017
-      database: infoweb
+#  data:
+#    mongodb:
+#      host: 127.0.0.1
+#      port: 27017
+#      database: infoweb
 
   main:
     allow-bean-definition-overriding: true

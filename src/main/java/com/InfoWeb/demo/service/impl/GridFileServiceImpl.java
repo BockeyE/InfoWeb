@@ -21,7 +21,7 @@ import java.io.InputStream;
 @Service
 public class GridFileServiceImpl implements GridFileService {
 
-    @Resource
+//    @Resource
     GridFsTemplate gridFsTemplate;
     @Value("${localURL}")
     String url;
@@ -39,6 +39,5 @@ public class GridFileServiceImpl implements GridFileService {
             return gridFsTemplate.getResource(one).getInputStream();
         }
         return null;
-
     }
 }

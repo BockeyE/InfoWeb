@@ -1,6 +1,7 @@
 package com.InfoWeb.demo.controller;
 
-import com.InfoWeb.demo.service.impl.GridFileServiceImpl;
+import com.InfoWeb.demo.model.FileEntity;
+import com.InfoWeb.demo.service.impl.FileToDbService;
 import com.InfoWeb.demo.util.ToutiaoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +25,20 @@ import java.util.Map;
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    //    @Resource
+//    GridFileServiceImpl gridFileService;
     @Resource
-    GridFileServiceImpl gridFileService;
+    FileToDbService fileToDbService;
+    @Value("${localURL}")
+    String localURL;
 
-    @RequestMapping("/pic/show/{id}")
-    public Map showFile(@PathVariable String id, HttpServletResponse response) {
+    @RequestMapping("/pic/show/{md}")
+    public Map showFile(@PathVariable String md, HttpServletResponse response) {
         try (ServletOutputStream outputStream = response.getOutputStream()) {
-            response.setContentType("application/pdf");
-            InputStream fis = gridFileService.getFile(id);
-            FileWriteToOut(fis, outputStream);
+//            InputStream fis = gridFileService.getFile(md);
+            FileEntity byMD5 = fileToDbService.findByMD5(md);
+            if (byMD5 != null) FileWriteToOut(byMD5.getFileBytes(), outputStream);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,21 +58,16 @@ public class FileController {
         }
     }
 
-    @RequestMapping(value = "/uploadImage/", method = {RequestMethod.GET})
-    public String uploadImage() {
-        return "upload";
-    }
-
-
     @RequestMapping(value = "/uploadImage/", method = {RequestMethod.POST})
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         try {
-            String mongoid = gridFileService.saveImage(file);
-            if (mongoid == null) {
+//            String mongoid = gridFileService.saveImage(file);
+            String hash = fileToDbService.saveFile(file.getBytes(), file.getOriginalFilename());
+            if (hash == null) {
                 return ToutiaoUtil.getJSONString(1, "上传图片失败");
             }
-            return ToutiaoUtil.getJSONString(0, mongoid);
+            return ToutiaoUtil.getJSONString(0, localURL + "/pic/show/" + hash);
         } catch (Exception e) {
             logger.error("上传图片失败" + e.getMessage());
             return ToutiaoUtil.getJSONString(1, "上传图片失败");
@@ -83,7 +84,13 @@ public class FileController {
         }
         out.flush();
         fis.close();
+    }
 
+
+    private void FileWriteToOut(byte[] bytes, OutputStream out) throws IOException {
+        out.write(bytes);
+        out.flush();
+        out.close();
     }
 
 
