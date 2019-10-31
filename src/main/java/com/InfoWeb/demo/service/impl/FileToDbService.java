@@ -30,9 +30,14 @@ public class FileToDbService {
     FileDao fileDao;
 
     public String saveFile(byte[] bytes, String name) {
+        String filehash = getSha256ByBytes(bytes);
+        FileEntity byMD5 = findByMD5(filehash);
+        if (byMD5 != null) return "";
+
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileName(name);
-        fileEntity.setFileMD5(getSha256ByBytes(bytes));
+
+        fileEntity.setFileMD5(filehash);
         fileEntity.setFileBytes(bytes);
         FileEntity save = fileDao.save(fileEntity);
         if (save == null) {
@@ -98,14 +103,14 @@ public class FileToDbService {
         return stringBuffer.toString();
     }
 
-    public static String getSha256ByBytes(byte[] bytes){
-       return org.apache.commons.codec.digest.DigestUtils.sha256Hex(bytes);
+    public static String getSha256ByBytes(byte[] bytes) {
+        return org.apache.commons.codec.digest.DigestUtils.sha256Hex(bytes);
     }
 
     public static void main(String[] args) throws IOException {
-        File f=new File("c:/ZZBK/sqs.pdf");
-        byte[] buf=new byte[(int) f.length()];
-        FileInputStream fis=new FileInputStream(f);
+        File f = new File("c:/ZZBK/sqs.pdf");
+        byte[] buf = new byte[(int) f.length()];
+        FileInputStream fis = new FileInputStream(f);
         fis.read(buf);
         String s = byte2Hex(org.apache.commons.codec.digest.DigestUtils.sha256(buf));
         System.out.println(s);

@@ -4,7 +4,6 @@ package com.InfoWeb.demo.controller;
 import com.InfoWeb.demo.async.EventModel;
 import com.InfoWeb.demo.async.EventProducer;
 import com.InfoWeb.demo.async.EventType;
-import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.service.UserService;
 import com.InfoWeb.demo.util.ToutiaoUtil;
 import org.slf4j.Logger;
@@ -43,7 +42,6 @@ public class LoginController {
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
-
                 response.addCookie(cookie);
                 logger.info("cookie : " + cookie.getValue() + " " + cookie.getName());
                 return ToutiaoUtil.getJSONString(0, "注册成功");
@@ -62,12 +60,10 @@ public class LoginController {
     public String loginPost(Model model, @RequestParam("username") String username,
                             @RequestParam("password") String password,
                             @RequestParam(value = "rember", defaultValue = "0") int rememberme,
-                            HttpServletResponse response, HttpServletRequest request) {
+                            HttpServletResponse response, HttpServletRequest request, HttpSession session) {
 
         System.out.println("login ctrl");
         try {
-
-
             Map<String, Object> map = userService.login(username, password);
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
@@ -76,7 +72,6 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 5);
                 }
                 response.addCookie(cookie);
-                HttpSession session = request.getSession();
                 session.setAttribute("user", userService.getUser(username));
                 return ToutiaoUtil.getJSONString(0, "登录成功");
             } else {
@@ -91,8 +86,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
-    public String logout(@CookieValue("ticket") String ticket) {
+    public String logout(@CookieValue("ticket") String ticket, HttpSession session) {
         userService.logout(ticket);
+        session.removeAttribute("user");
         logger.info("logout：跳转到首页");
         return "redirect:/";
     }

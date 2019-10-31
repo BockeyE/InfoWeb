@@ -5,7 +5,6 @@ import com.InfoWeb.demo.async.EventModel;
 import com.InfoWeb.demo.async.EventProducer;
 import com.InfoWeb.demo.async.EventType;
 import com.InfoWeb.demo.model.EntityType;
-import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.model.News;
 import com.InfoWeb.demo.model.User;
 import com.InfoWeb.demo.service.LikeService;
@@ -19,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    @Autowired
-    private HostHolder hostHolder;
 
     @Autowired
     private NewsService newsService;
@@ -36,8 +35,8 @@ public class LikeController {
 
     @RequestMapping(value = {"/like"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String like(@RequestParam("newsId") int newsId) {
-        User user = hostHolder.getUser();
+    public String like(@RequestParam("newsId") int newsId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             return ToutiaoUtil.getJSONString(1, "请登录后点赞！");
         }
@@ -48,15 +47,15 @@ public class LikeController {
         newsService.updateLikeCount(newsId, (int) likeCount);
         eventProducer.startEvent(new EventModel(EventType.LIKE)
                 .setEntityOwnerId(news.getUserId())
-                .setActorId(hostHolder.getUser().getId())
+                .setActorId(user.getId())
                 .setEntityId(newsId));
         return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
     }
 
     @RequestMapping(value = {"/dislike"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String dislike(@RequestParam("newsId") int newsId) {
-        User user = hostHolder.getUser();
+    public String dislike(@RequestParam("newsId") int newsId,HttpSession session) {
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             return ToutiaoUtil.getJSONString(1, "请登录后点赞！");
         }

@@ -2,7 +2,6 @@ package com.InfoWeb.demo.service.impl;
 
 import com.InfoWeb.demo.dao.LoginTicketDAO;
 import com.InfoWeb.demo.dao.UserDAO;
-import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.model.LoginTicket;
 import com.InfoWeb.demo.model.User;
 import com.InfoWeb.demo.service.UserService;
@@ -23,8 +22,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private LoginTicketDAO loginTicketDAO;
-    @Autowired
-    private HostHolder hostHolder;
 
     @Override
     public Map<String, Object> register(String username, String password) {

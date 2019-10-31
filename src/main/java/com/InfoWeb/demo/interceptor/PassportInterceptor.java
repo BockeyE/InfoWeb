@@ -4,7 +4,6 @@ package com.InfoWeb.demo.interceptor;
 
 import com.InfoWeb.demo.dao.LoginTicketDAO;
 import com.InfoWeb.demo.dao.UserDAO;
-import com.InfoWeb.demo.model.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,8 +23,6 @@ public class PassportInterceptor implements HandlerInterceptor{
     @Autowired
     private UserDAO userDAO;
 
-    @Autowired
-    private HostHolder hostHolder;
 
 
     @Override

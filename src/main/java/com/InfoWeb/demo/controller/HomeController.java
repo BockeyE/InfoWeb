@@ -34,23 +34,24 @@ public class HomeController {
     private NewsService newsService;
 
     @Autowired
-    private HostHolder hostHolder;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private LikeService likeService;
 
-    private List<ViewObject> getNews(int userId, int offset, int limit) {
+    private List<ViewObject> getNews(int userId, int offset, int limit, HttpSession session) {
         List<News> newsList = newsService.getLatestNews(userId, offset, limit);
-        int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
+        User user = (User) session.getAttribute("user");
+        int localUserId = user != null ? user.getId() : 0;
         List<ViewObject> vos = new ArrayList<>();
         for (News news : newsList) {
             ViewObject vo = new ViewObject();
             vo.set("news", news);
-
-            vo.set("user", userService.getUser(news.getUserId()));
+            User user0 = userService.getUser(news.getUserId());
+            if (userId == 0) {
+                user0.setHeadUrl("");
+            }
+            vo.set("user", user0);
             if (localUserId != 0) {
                 vo.set("like", news.getLikeCount());
             } else {
@@ -63,20 +64,18 @@ public class HomeController {
 
     }
 
-    private List<ViewResult> getNewsDto(int userId, int offset, int limit) {
+    private List<ViewResult> getNewsDto(int userId, int offset, int limit, User user) {
         List<News> newsList = null;
         if (userId == 0) {
             newsList = newsService.getLatestNews(offset, limit);
         } else {
             newsList = newsService.getLatestNews(userId, offset, limit);
         }
-
-        int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
+        int localUserId = user != null ? user.getId() : 0;
         List<ViewResult> vos = new ArrayList<>();
         for (News news : newsList) {
             ViewResult vo = new ViewResult();
             vo.setNews(news);
-//            vo.setUser(userService.getUser(news.getUserId()));
             vo.setUser(new User());
             if (localUserId != 0) {
                 vo.setLike(likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS, news.getId()));
@@ -92,26 +91,28 @@ public class HomeController {
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model,
                         @RequestParam(value = "pop", defaultValue = "0") int pop, HttpServletRequest request) throws Exception {
-        List<ViewResult> vos = getNewsDto(0, 0, 30);
-        if (vos != null && vos.size() > 0) {
-            model.addAttribute("vos", vos);
-        }
-//        User u = hostHolder.getUser();// boot 里使用的nio线程并不是固定的--已经设置的connect 是keep alive的情况
         HttpSession session = request.getSession(false);
+        User user = null;
         if (session != null) {
-            Object user = session.getAttribute("user");
+            user = (User) session.getAttribute("user");
             if (user != null) {
                 model.addAttribute("user", user);
                 pop = 0;
             }
+        }
+        List<ViewResult> vos = getNewsDto(0, 0, 30, user);
+        if (vos != null && vos.size() > 0) {
+            model.addAttribute("vos", vos);
         }
         model.addAttribute("pop", pop);
         return "home";
     }
 
     @RequestMapping(path = {"/user/{userId}"}, method = {RequestMethod.GET, RequestMethod.GET})
-    public String userIndex(Model model, @PathVariable("userId") int userId) {
-        model.addAttribute("vos", getNews(userId, 0, 10));
+    public String userIndex(Model model, @PathVariable("userId") String userId, HttpSession session) {
+        if (userId == null || userId.equals("null")) return "home";
+        int uid = Integer.parseInt(userId);
+        model.addAttribute("vos", getNews(uid, 0, 10, session));
         return "home";
     }
 

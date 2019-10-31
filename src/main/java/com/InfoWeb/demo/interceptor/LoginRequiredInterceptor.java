@@ -1,8 +1,6 @@
 package com.InfoWeb.demo.interceptor;
 
 
-import com.InfoWeb.demo.model.HostHolder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,17 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @Component
-public class LoginRequiredInterceptor implements HandlerInterceptor{
+public class LoginRequiredInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private HostHolder hostHolder;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-       if(hostHolder.getUser() == null){
-           httpServletResponse.sendRedirect("/login");
-           return  false;
-       }
+        if (httpServletRequest.getSession().getAttribute("user") == null) {
+            httpServletResponse.sendRedirect("/login");
+            return false;
+        }
         return true;
     }
 

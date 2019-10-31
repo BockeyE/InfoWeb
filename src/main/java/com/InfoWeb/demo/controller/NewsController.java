@@ -1,10 +1,10 @@
 package com.InfoWeb.demo.controller;
 
 
+import com.InfoWeb.demo.model.User;
 import com.InfoWeb.demo.model.vo.CommentVO;
 import com.InfoWeb.demo.model.Comment;
 import com.InfoWeb.demo.model.EntityType;
-import com.InfoWeb.demo.model.HostHolder;
 import com.InfoWeb.demo.model.News;
 import com.InfoWeb.demo.service.*;
 import com.InfoWeb.demo.util.ToutiaoUtil;
@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +32,6 @@ public class NewsController {
 //    @Autowired
 //    private GridFileService gridService;
 
-    @Autowired
-    private HostHolder hostHolder;
 
     @Autowired
     private UserService userService;
@@ -54,18 +53,19 @@ public class NewsController {
     @ResponseBody
     public String addNewsPost(@RequestParam("image") String image,
                               @RequestParam("title") String title,
-                              @RequestParam("link") String link) {
+                              @RequestParam("link") String link, HttpSession session) {
         try {
+            User user = (User) session.getAttribute("user");
             News news = new News();
             news.setCreateDate(new Date());
             news.setTitle(title);
             news.setImage(image);
             news.setLink(link);
-            if (hostHolder.getUser() != null) {
-                news.setUserId(hostHolder.getUser().getId());
+            if (user != null) {
+                news.setUserId(user.getId());
             } else {
                 //设置一个匿名用户
-                news.setUserId(3);
+                news.setUserId(0);
             }
             newsService.addNews(news);
             return ToutiaoUtil.getJSONString(0, image);
@@ -77,11 +77,12 @@ public class NewsController {
     }
 
     @RequestMapping(value = {"/news/{newsId}"}, method = {RequestMethod.GET})
-    public String newsDetail(@PathVariable("newsId") int newsId, Model model) {
+    public String newsDetail(@PathVariable("newsId") int newsId, Model model,HttpSession session) {
         try {
             News news = newsService.getById(newsId);
+            User user = (User) session.getAttribute("user");
             if (news != null) {
-                int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
+                int localUserId = user != null ? user.getId() : 0;
                 if (localUserId != 0) {
                     model.addAttribute("like", likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS, news
                             .getId()));
