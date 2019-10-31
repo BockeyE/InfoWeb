@@ -20,7 +20,7 @@ public class FileEntity {
     String fileName;
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(columnDefinition = "MEDIUMBLOB")
     byte[] fileBytes;
 
 }

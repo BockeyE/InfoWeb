@@ -79,10 +79,6 @@ public class LoginController {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userService.getUser(username));
                 return ToutiaoUtil.getJSONString(0, "登录成功");
-//                eventProducer.startEvent(new EventModel(EventType.LOGIN)
-//                        .setActorId((int) map.get("userId"))
-//                        .setExts("username", "牛客")
-//                        .setExts("to", "534634799@qq.com"));
             } else {
                 return ToutiaoUtil.getJSONString(1, map);
 
