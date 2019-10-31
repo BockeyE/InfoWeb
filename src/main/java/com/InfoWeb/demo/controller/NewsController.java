@@ -28,8 +28,8 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @Autowired
-    private GridFileService gridService;
+//    @Autowired
+//    private GridFileService gridService;
 
     @Autowired
     private HostHolder hostHolder;
